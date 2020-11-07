@@ -38,6 +38,7 @@ class BookDetailView(generic.DetailView):
         context = super(BookDetailView, self).get_context_data(*args, **kwargs)
         book_list, new_obj = Booklist.objects.new_or_get(self.request)
         context['user_booklist'] = book_list
+        context['is_owner'] = self.get_object().is_owner(self.request.user)
         return context
 
 

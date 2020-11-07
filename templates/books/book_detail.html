@@ -30,7 +30,9 @@
             </div>
             {% include 'snippets/booklist_form.html' with obj=object %}
             <p>{% if object.summary %}{{ object.summary }}{% else %}No summary set to this book.{% endif %}</p>
+            {% if is_owner %}
             <a href="{% url 'books:update' slug=object.slug %}" style='font-size:30px; float: right; position: absolute; top: 20px; right: 20px;'>&#9998;</a>
+            {% endif %}
         </div>
     </div><br>
     <h3>Latest Reviews</h3>
