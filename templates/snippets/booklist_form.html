@@ -1,0 +1,12 @@
+<form  id="booklist-form-id" class="booklist-form" action="{% url 'books:user_booklist_update' %}" method="POST" data-url="{% url 'books:user_booklist_update' %}">
+    <input type="hidden" name="book_id" id="id_book" value="{{ obj.id }}" {% if  product.is_digital %}data-is-digital="true"{% endif%}/>
+    {% if obj in book_list_obj.books.all %} <br>
+        <button type="submit" id="booklist-submit-btn-{{ forloop.counter }}" onclick="toggleText(this.id)" class="btn btn-sm btn-outline-danger">
+            Remove from my booklist
+        </button>
+    {% else %}
+        <button type="submit" id="booklist-submit-btn-{{ forloop.counter }}" onclick="toggleText(this.id)" class="btn btn-sm btn-outline-success">
+            Add to my booklist
+        </button>
+    {% endif %}
+</form><br>

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Registration - djBooks{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row py-5 my-5">
+        <div class="col-md-8 border-right">
+            <h1 class="display-4">Create Account</h1> <br>
+
+            <form  id="account-create-form" class="my-ajax-form" action="/accounts/profile/" method="POST" data-url='{{ request.build_absolute_uri|safe }}'>
+                <label for="id_email">Email address:</label>
+                <input type="email" name="email" maxlength="255" class="form-control" required="" id="id_email">
+                <span id="form-email-error"></span>
+                <label for="id_password">Password:</label>
+                <input type="password" name="password" maxlength="128" class="form-control" required="" id="id_password">
+               <br>
+               <button id="form-submit-btn" class="btn btn-lg btn-success" type="submit">Create account</button>
+            </form>
+            <p>Already have an account ? <a href="{% url 'accounts:login' %}" class="link">Login Here</a></p>
+
+        </div>
+        <div class="col-md-4">
+            <h4>Creating account will allow you to do anything free in the app</h4>
+            <ul>
+                <li>Read books</li>
+                <li>Get recommendations</li>
+                <li>Group discussion</li>
+                <li>Friends</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+    var formData = document.getElementById('account-create-form');
+    var submitBtn = document.getElementById('form-submit-btn');
+    
+    formData.addEventListener('submit', () => {
+        submitBtn.innerHTML = "<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Loading...";
+        submitBtn.setAttribute("disabled", "");
+
+        // disable inputes
+        // formData.childNodes[3].disabled = true;
+        // formData.childNodes[9].disabled = true;
+
+        window.setTimeout(function () {
+            // when asyncronous action is done, remove the spinner
+            // re-enable button/fieldset
+            submitBtn.innerHTML = "Create Account"
+            submitBtn.removeAttribute("disabled", "");
+            formData.childNodes[3].disabled = false;
+            formData.childNodes[9].disabled = false;
+        }, 4000);
+    }, false);
+</script>
+
+{% endblock js %}

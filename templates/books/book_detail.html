@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load ratings %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-auto-dismiss" id="alert-auto-dismiss-{{ forloop.counter }}">
+            {{ message }}
+            <button type="submit" class="auto-close" id="auto-close" onclick="autoDesmiss({{ forloop.counter }})">&times;</button>
+        </div>
+    {% endfor %}
+{% endif %}
+<br>
+<div class="container pt-5">
+    <div class="row pt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <img src="{{ object.cover_page.url }}" alt="" class="ml-auto" width="400px"/>
+            </div>
+        </div>
+        <div class="col-md-6 mr-auto">
+            <h3><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></h3>
+            <p class="pb-2 m-0">By :
+                <a href="{{ object.get_absolute_url }}" class="text-muted">{{ object.user }}</a> 
+                [ Author : <span class="text-muted">{{ object.author }} ]</span>
+            </p>
+            <div class="d-flex text-muted">
+                <small style="font-size: 16px;">{% ratings object %}</small>
+            </div>
+            {% include 'snippets/booklist_form.html' with obj=object %}
+            <p>{% if object.summary %}{{ object.summary }}{% else %}No summary set to this book.{% endif %}</p>
+            <a href="{% url 'books:update' slug=object.slug %}" style='font-size:30px; float: right; position: absolute; top: 20px; right: 20px;'>&#9998;</a>
+        </div>
+    </div><br>
+    <h3>Latest Reviews</h3>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <a href="{{ object.get_absolute_url }}" class="bg-dark text-light text-center p-2">
+                    <img src="{{ object.cover_page.url }}" alt="" class="mr-3" style="width: 60px; height: 60px; border-radius: 50%;"/>
+                    Adil Mohammed
+                </a>
+                <div class="p-3">
+                    <p class="pb-2 m-0 text-muted">2 weeks ago</p>
+                    <p>This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                        This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                        This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <a href="{{ object.get_absolute_url }}" class="bg-dark text-light text-center p-2">
+                    <img src="{{ object.cover_page.url }}" alt="" class="mr-3" style="width: 60px; height: 60px; border-radius: 50%;"/>
+                    Adil Mohammed
+                </a>
+                <div class="p-3">
+                    <p class="pb-2 m-0 text-muted">2 weeks ago</p>
+                    <p>This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                        This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                        This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <a href="{{ object.get_absolute_url }}" class="bg-dark text-light text-center p-2">
+                    <img src="{{ object.cover_page.url }}" alt="" class="mr-3" style="width: 60px; height: 60px; border-radius: 50%;"/>
+                    Adil Mohammed
+                </a>
+                <div class="p-3">
+                    <p class="pb-2 m-0 text-muted">2 weeks ago</p>
+                    <p>This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                        This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                        This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <a href="{{ object.get_absolute_url }}" class="bg-dark text-light text-center p-2">
+                    <img src="{{ object.cover_page.url }}" alt="" class="mr-3" style="width: 60px; height: 60px; border-radius: 50%;"/>
+                    Adil Mohammed
+                </a>
+                <div class="p-3">
+                    <p class="pb-2 m-0 text-muted">2 weeks ago</p>
+                    <p>This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                        This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                        This is realy awesome no summary set to this book. This is realy awesome no summary set to this book.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
