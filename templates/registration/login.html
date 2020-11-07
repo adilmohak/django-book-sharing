@@ -3,9 +3,6 @@
 
 {% block content %}
 
-<!-- <input type="email" name="email" id="email" class="form-control" placeholder="Email"> <br>
-<input type="password" name="password" id="password" class="form-control" placeholder="Password"> <hr> -->
-
 <div class="container">
     <div class="row py-5 my-5">
         <div class="col-md-8 border-right">
@@ -22,14 +19,11 @@
               <hr>
               <button type="submit" class="btn btn-primary" id="login-btn">LogIn</button>
             </form>
-            <p><a href="{% url 'accounts:password_reset' %}">Forgot password ?</a></p>
-            <p>New for Fidel ?<a href="{% url 'accounts:create_account' %}"> Register here</a></p>
+            <p><a href="{% url 'password_reset' %}">Forgot password ?</a></p>
+            <p class="text-muted">New for Fidel ?<a href="{% url 'accounts:create_account' %}"> Register here</a></p>
         </div>
         <div class="col-md-4">
-            <h5>Fidel Books</h5>
-            <p>Creating an account allows you to have a promotional link and then you get 10% commission 
-            (10 Birr) per user. You are also the first person to receive news, updates and other activities from this site.</p>
-            <ul>
+            <ul class="lead">
                 <li>Read books</li>
                 <li>Get recommendations</li>
                 <li>Group discussion</li>

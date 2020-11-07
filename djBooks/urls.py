@@ -21,8 +21,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import url
 
+from django.contrib.auth import views as auth_view
+
 # from django.conf.urls import include # 2 new line
 from rest_framework.authtoken.views import obtain_auth_token #11
+
+from accounts.forms import EmailValidationOnForgotPassword
 
 urlpatterns = [
     path('', include('pages.urls', namespace="pages")),
@@ -43,6 +47,26 @@ urlpatterns = [
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
     
     path('admin/', admin.site.urls),
+    
+    # generic views
+    # url(r'^', include('django.contrib.auth.urls')),
+
+    url(r'^password-reset/$', auth_view.PasswordResetView.as_view(
+        form_class=EmailValidationOnForgotPassword,
+        template_name='registration/password_reset.html'
+    ), name='password_reset'),
+
+    url(r'^password-reset/done/$', auth_view.PasswordResetDoneView.as_view(
+        template_name='registration/password_reset_done.html'
+    ), name='password_reset_done'),
+
+    url(r'^password-reset-confirm/<uidb64>/<token>/$', auth_view.PasswordResetConfirmView.as_view(
+        template_name='registration/password_reset_confirm.html'
+    ), name='password_reset_confirm'),
+
+    url(r'^password-reset-complete/$', auth_view.PasswordResetCompleteView.as_view(
+        template_name='registration/password_reset_complete.html'
+    ), name='password_reset_complete')
 ]
 
 if settings.DEBUG:
