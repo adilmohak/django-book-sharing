@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -207,3 +208,6 @@ LOGOUT_REDIRECT_URL = '/accounts/login/'
 STAR_RATINGS_RERATE = True
 STAR_RATINGS_STAR_WIDTH = 15
 STAR_RATINGS_STAR_HEIGHT = 15
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
