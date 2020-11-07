@@ -32,7 +32,9 @@
         <div class="col-md-3 p-2">
             <div class="card p-3">
                 <img src="{{ user.image.url }}" alt="" class="mx-auto img-rounded" width="200px" style="max-width: 200px;">
-                <p class="text-center lead"> Adil mohammed</p>
+                <p class="text-center lead"> {{ user.get_full_name }}</p>
+                - Full Name {{ user.name }} <br>
+                - Location/Address {{ user.location }}
                 <div class="text-muted p-2 border mb-3">
                     <li>{{ user_books.count }} books </li>
                     <li>{{ book_list_obj.books.all.count }} books in <a href="#">booklist</a></li>
