@@ -3,16 +3,16 @@ from django.core import serializers
 from django.contrib.auth import authenticate, login
 
 
-class AjaxFormMixin(object):
+class UserCreateAjaxFormMixin(object):
     def form_invalid(self, form):
-        response = super(AjaxFormMixin, self).form_invalid(form)
+        response = super(UserCreateAjaxFormMixin, self).form_invalid(form)
         if self.request.is_ajax():
             return JsonResponse(form.errors, status=400)
         else:
             return response
 
     def form_valid(self, form):
-        response = super(AjaxFormMixin, self).form_valid(form)
+        response = super(UserCreateAjaxFormMixin, self).form_valid(form)
         # user = form.save(commit=False)
         # password = form.cleaned_data['password']
         # print(password)

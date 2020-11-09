@@ -23,7 +23,7 @@
       color: gray;
       margin-left: -5px;
   }
-  #navbar-brand-img {
+  #navbar-brand-wrapper {
     position: absolute;
     display: block;
     top: 0;
@@ -37,57 +37,15 @@
   }
   @media (max-width: 1000px) {
     #navbar {background: #fff !important;}
-    #navbar-brand-img small {
+    #navbar-brand-wrapper small {
       display: none !important;
     }
   }
-
-  /* The Modal (background) */
-  .faq-modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 999; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: #474e5d;
-    padding-top: 50px;
-  }
-
-  /* Modal Content/Box */
-  .faq-modal-content {
-    background-color: #fefefe;
-    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-    border-radius: 15px;
-  }
-
-  .close {
-    position: absolute;
-    right: 35px;
-    top: 85px;
-    font-size: 60px;
-    font-weight: 200;
-    color: #f1f1f1;
-    padding: 0 15px;
-    background-color: #474e5d;
-  }
-
-  .close:hover,
-  .close:focus {
-    color: #fff;
-    cursor: pointer;
-  }
-
-  
 </style>
 
 <nav id="navbar" class="navbar navbar-expand-xl navbar-light py-0 fixed-top">
     <div class="mr-5">F</div>
-    <a class="navbar-brand" id="navbar-brand-img" href="/">Fidele <br> <small style="font-size: 12px;">READ WITH US</small></a>
+    <a class="navbar-brand" id="navbar-brand-wrapper" href="/">Fidele <br> <small style="font-size: 12px;">READ WITH US</small></a>
     <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -114,13 +72,12 @@
           <a class="nav-link" href="{% url 'pages:contact' %}">Contact</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#faq" onclick="document.getElementById('id01').style.display='block'">FAQ</a>
+          <a class="nav-link" href="#faq" data-toggle="modal" data-target="#faq">FAQ</a>
         </li>
       </ul>
 
-      <form class="form-inline d-flex">
-        <input class="form-control p-3" type="text" placeholder="Search 10,000+ books..." aria-label="Search" 
-        style="padding-right: 50px;">
+      <form class="form-inline d-flex" action="{% url 'searchs:query' %}" method="GET">
+        <input class="form-control" type="text" name="q" value="{{ request.GET.q }}" placeholder="Search Fidele..." required/>
         <button class="btn btn-outline-secondary" type="submit">Search</button>
       </form>
 
@@ -132,13 +89,17 @@
         <li class="nav-item dropdown">
           <a class="btn btn-sm btn-light dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <img src="{{ user.image.url }}" alt="" width="35px" style="max-height: 35px;">
-            {{ user.get_full_name|truncatechars:7 }}
+            {{ request.user.get_full_name|truncatechars:7 }}
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
             <a class="dropdown-item" href="{% url 'accounts:user_profile' %}">Profile</a>
             <a class="dropdown-item" href="{% url 'books:user_booklist' %}">My BookList</a>
+            <div class="text-muted text-center bg-light">Settings</div>
             <a class="dropdown-item" href="{% url 'accounts:update_account' %}">Settings</a>
-            <a class="dropdown-item" href="{% url 'accounts:change_password' %}">Change password</a><hr>
+            <a class="dropdown-item" href="{% url 'accounts:change_password' %}">Change password</a>
+            <p class="text-muted text-center bg-light">Book</p>
+            <a href="{% url 'books:create' %}" class="btn btn-primary ml-4">&#43; Create book</a>
+            <hr/>
             <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
           </div>
         </li>
@@ -153,26 +114,30 @@
     </div>
 </nav>
 
-<div id="id01" class="faq-modal">
-  <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close FAQ">&times;</span>
-  <div class="faq-modal-content">
-    <div class="p-4">
-      <h1>FAQ (Frequently asked questions)</h1>
-      <span><h3 class="alert alert-info">Fidele announce you a highly rated book every month</h3></span><br>
-      <b>What is Fidele Books</b>
-      <ul>
-        <li class="lead">
-          Fidel Books is a Platform that allows you to connect with other like
-          minded readers, swap books, discuss, comment and review books.
-        </li>
-      </ul>
-      <span><b>How Fidele works</b> (step by step)</span>
-      <ul>
-        <li>Create free account</li>
-        <li>Add your book if you have</li>
-        <li>Add books to your booklist</li>
-        <li>Rate books you like</li>
-      </ul>
+<div class="modal fade" id="faq" tabindex="-1" role="dialog" aria-labelledby="faqLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="faqLabel">FAQ (Frequently asked questions)</h5> 
+        <button data-dismiss="modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <span><h6 class="alert alert-info">Fidele announce you a highly rated book every month</h6></span><br>
+        <b>What is Fidele Books</b>
+        <ul>
+          <li class="lead">
+            Fidel Books is a Platform that allows you to connect with other like
+            minded readers, swap books, discuss, comment and review books.
+          </li>
+        </ul>
+        <span><b>How Fidele works</b> (step by step)</span>
+        <ul>
+          <li>Create free account</li>
+          <li>Add your book if you have</li>
+          <li>Add books to your booklist</li>
+          <li>Rate books you like</li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -183,7 +148,7 @@
 
     // Get the navbar
     var navbar = document.getElementById("navbar");
-    var navbarBrand = document.getElementById("navbar-brand-img");
+    var navbarBrand = document.getElementById("navbar-brand-wrapper");
 
     // Get the offset position of the navbar
     var sticky = navbar.offsetTop;

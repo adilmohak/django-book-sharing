@@ -12,12 +12,12 @@ from django.http import JsonResponse
 from django.core import serializers
 
 from books.models import Book, Booklist
-from .mixins import AjaxFormMixin
+from .mixins import UserCreateAjaxFormMixin
 from .forms import UserUpdateForm, UserCreateForm
 from .models import User
 
 
-class CreateUserView(AjaxFormMixin, generic.FormView):
+class CreateUserView(UserCreateAjaxFormMixin, generic.FormView):
     # model = User
     # fields = ['email', 'password']
     form_class = UserCreateForm
@@ -83,6 +83,21 @@ def profile_page(request):
     user_books = Book.objects.filter(user=request.user)
     booklist_obj = Booklist.objects.new_or_get(request)
     return render(request, 'accounts/user_profile.html', {'user_books': user_books, 'booklist_obj': booklist_obj})
+
+
+class UserDetailView(generic.DetailView):
+    model = User
+    template_name = "accounts/user_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(UserDetailView, self).get_context_data(**kwargs)
+        try:
+            book_list_obj = Booklist.objects.get(user=self.get_object())
+        except:
+            book_list_obj = Booklist.objects.new(user=self.get_object())
+        context['detail_user_booklist'] = book_list_obj
+        context['detail_user_books'] = Book.objects.filter(user=self.get_object())
+        return context
 
 
 @login_required

@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
+from django.db.models import Q
 from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser, AbstractUser)
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None,**extra_fields):
@@ -17,6 +19,16 @@ class UserManager(BaseUserManager):
         user.is_admin = True
         user.save(using=self._db)
         return user
+
+    def search(self, query=None):
+        qs = self.get_queryset()
+        if query is not None:
+            or_lookup = (Q(email__icontains=query) | 
+                         Q(name__icontains=query)| 
+                         Q(location__icontains=query)
+                        )
+            qs = qs.filter(or_lookup).distinct() # distinct() is often necessary with Q lookups
+        return qs
 
 
 class User(AbstractBaseUser):
@@ -43,9 +55,9 @@ class User(AbstractBaseUser):
             full_name = self.name
         return full_name
 
-    # @property
-    # def get_absolute_url(self):
-    #     return reverse('accounts:user_profile')
+    @property
+    def get_absolute_url(self):
+        return reverse('accounts:user_detail', kwargs={'pk': self.id})
     
     # @property
     def has_perm(self, perm, obj=None):

@@ -31,6 +31,7 @@ from accounts.forms import EmailValidationOnForgotPassword
 urlpatterns = [
     path('', include('pages.urls', namespace="pages")),
     path('accounts/', include('accounts.urls', namespace="accounts")),
+    path('searchs/', include('searchs.urls', namespace="searchs")),
     # path('api/books/', include('books.api.urls', namespace="api-books")),
     # path('admin/', admin.site.urls),
 

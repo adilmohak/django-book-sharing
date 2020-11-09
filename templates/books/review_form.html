@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br><br><br><br>
+<div class="container">
+    <div class="col-md-6 mx-auto">
+        <h3>Edit your review</h3> <br>
+        <form action="" method="POST">{% csrf_token %}
+            {{ form.user }}
+            {{ form.book }}
+            {{ form.review }} <br>
+            <input type="submit" class="btn btn-primary" value="Update review">
+        </form>
+    </div>
+</div>
+<br><br><br><br>
+{% endblock %}

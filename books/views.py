@@ -7,8 +7,9 @@ from django.utils.decorators import method_decorator
 from star_ratings.models import Rating
 
 # from .decorators import is_owner_required
-from .models import Book, Booklist
-from .forms import BookForm
+from .models import Book, Booklist, Review
+from .forms import BookForm, ReviewForm
+from .mixins import ReviewAjaxFormMixin
 
 
 class BookListView(generic.ListView):
@@ -36,9 +37,15 @@ class BookDetailView(generic.DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(BookDetailView, self).get_context_data(*args, **kwargs)
-        book_list, new_obj = Booklist.objects.new_or_get(self.request)
-        context['user_booklist'] = book_list
+        # book_list, new_obj = Booklist.objects.new_or_get(self.request)
+        # context['user_booklist'] = book_list
         context['is_owner'] = self.get_object().is_owner(self.request.user)
+        context['reviews'] = Review.objects.filter(book=self.get_object())
+        context['related_books'] = Book.objects.filter(user=self.request.user).order_by('-ratings')
+        try:
+            context['is_reviewed'] = Review.objects.get(user=self.request.user, book=self.get_object())
+        except:
+            context['is_reviewed'] = False
         return context
 
 
@@ -73,25 +80,32 @@ class BookCreateView(generic.CreateView):
 #     return render(request, 'books/book_form.html', {'form': form})
 
 
-@login_required
-def book_update(request, slug):
-    book = Book.objects.get(slug=slug)
-    if book.is_owner(request.user):
-        if request.method == 'POST':
-            form = BookForm(request.POST, request.FILES, instance=book)
-            if form.is_valid():
-                obj = form.save(commit=False)
-                obj.user = request.user
-                obj.save()
-                messages.success(request, f'Book updated.')
-                return redirect('books:detail', slug=obj.slug)
-            else:
-                print(form.errors)
-        else:
-            form = BookForm(instance=book)
-    else:
-        raise Http404
-    return render(request, 'books/book_form.html', {'form': form})
+class BookUpdateView(generic.UpdateView):
+    # lookup_field = 'slug'
+    model = Book
+    form_class = BookForm
+    template_name = "books/book_form.html"
+
+
+# @login_required
+# def book_update(request, slug):
+#     book = Book.objects.get(slug=slug)
+#     if book.is_owner(request.user):
+#         if request.method == 'POST':
+#             form = BookForm(request.POST, request.FILES, instance=book)
+#             if form.is_valid():
+#                 obj = form.save(commit=False)
+#                 obj.user = request.user
+#                 obj.save()
+#                 messages.success(request, f'Book updated.')
+#                 return redirect('books:detail', slug=obj.slug)
+#             else:
+#                 print(form.errors)
+#         else:
+#             form = BookForm(instance=book)
+#     else:
+#         raise Http404
+#     return render(request, 'books/book_form.html', {'form': form})
 
 
 @login_required
@@ -153,3 +167,26 @@ def delete_book(request, slug):
         return redirect('accounts:user_profile')
     else:
         raise Http404
+
+
+# @method_decorator[@login_required]
+class ReviewCreateView(ReviewAjaxFormMixin, generic.CreateView):
+    model = Review
+    # fields = '__all__'
+    form_class = ReviewForm
+    success_url = '/books/'
+
+
+@login_required
+def review_update_view(request, slug):
+    book = get_object_or_404(Book, slug=slug)
+    review = get_object_or_404(Review, book=book.id, user=request.user)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Review updated')
+            return redirect('books:detail', slug=book.slug)
+    else:
+        form = ReviewForm(instance=review)
+    return render(request, 'books/review_form.html', {'form': form})

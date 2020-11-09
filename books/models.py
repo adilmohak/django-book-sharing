@@ -3,11 +3,16 @@ from django.contrib.auth.views import get_user_model
 from django.db.models.signals import pre_save
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.urls import reverse
+from autoslug import AutoSlugField
+from django.utils.text import slugify
+from django.db.models import Q
 # rating
 from django.contrib.contenttypes.fields import GenericRelation
 from star_ratings.models import Rating
 
-from .utils import unique_slug_generator
+# from django.core.validators import validate_slug
+
+# from .utils import unique_slug_generator
 
 User = get_user_model()
 
@@ -41,13 +46,6 @@ Thriller = "Thriller"
 Travel = "Travel" 
 Young_Adult = "Young Adult"
 
-GENRES = (
-    (Art, 'Art'),
-    (Biography, 'Biography'),
-    (Business, 'Business'),
-    (Children, 'Children'),
-)
-
 
 class Genres(models.Model):
     genres = models.CharField(max_length=120)
@@ -56,17 +54,37 @@ class Genres(models.Model):
         return "{0}".format(self.genres)
 
 
+class BookManager(models.Manager):
+    def search(self, query=None):
+        qs = self.get_queryset()
+        if query is not None:
+            or_lookup = (Q(title__icontains=query) | 
+                         Q(summary__icontains=query)| 
+                         Q(slug__icontains=query)| 
+                         Q(author__icontains=query)|
+                        #  Q(genres__icontains=query)|
+                         Q(timestamp__icontains=query)
+                        )
+            qs = qs.filter(or_lookup).distinct() # distinct() is often necessary with Q lookups
+        return qs
+
+
 class Book(models.Model):
-    slug = models.SlugField(blank=True, unique=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=120)
+    # slug = models.SlugField(blank=True)
+    slug = AutoSlugField(populate_from='title', unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     author = models.CharField(max_length=120, blank=True, null=True)
     summary = models.TextField(blank=True, null=True)
     # genres = models.TextField(choices=GENRES, blank=True, null=True)
     genres = models.ManyToManyField(Genres, blank=True)
     cover_page = models.ImageField(upload_to='cover_pages/%Y/%m/%d', default='default_book_cover.png')
     timestamp = models.DateTimeField(auto_now_add=True)
-    ratings = GenericRelation(Rating, related_query_name='foos')
+    ratings = GenericRelation(Rating, related_query_name='books')
+
+    # SLUG_REGEX = re.compile('^[-\w]+$')
+    objects = BookManager()
+
 
     def __str__(self):
         return "{0}".format(self.title)
@@ -76,22 +94,6 @@ class Book(models.Model):
     
     def is_owner(self, user):
         return self.user == user
-
-    # @property
-    # def no_of_rate(self):
-    #     ratings = Rating.objects.filter(book=self)
-    #     return len(ratings)
-
-    # @property
-    # def avg_rating(self):
-    #     sum = 0
-    #     ratings = Rating.objects.filter(book=self)
-    #     for rating in ratings:
-    #         sum += rating.stars
-    #     if len(ratings) > 0:
-    #         return sum / len(ratings)
-    #     else:
-    #         return 0
     
     @property
     def avg_rating(self):
@@ -106,31 +108,30 @@ class Book(models.Model):
     class Meta:
         ordering = ['-timestamp']
 
+    # def save(self, *args, **kwargs):
+    #     # value = str(self.title + self.id)
+    #     # if self.slug == None:
+    #     super().save(*args, **kwargs)
+        
+    #     value = "{obj_title}-{obj_id}".format(obj_title=self.title, obj_id=self.id)
+    #     self.slug = slugify(value, allow_unicode=True)
 
-def book_pre_save_receiver(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
-
-pre_save.connect(book_pre_save_receiver, sender=Book)
+# def pre_save_receiver(sender, instance, *args, **kwargs): 
+#    if not instance.slug: 
+#        instance.slug = unique_slug_generator(instance) 
 
 
-# class Rating(models.Model):
-#     user = models.ForeignKey(User, default=False, on_delete=models.CASCADE)
-#     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-#     stars = models.IntegerField(default=0,
-#         validators=[
-#             MaxValueValidator(5),
-#             MinValueValidator(0),
-#         ]
-#     )
-#     review = models.TextField(blank=True, null=True)
+# pre_save.connect(pre_save_receiver, sender = Book) 
 
-#     def __str__(self):
-#         return str(self.book)
 
-#     class Meta:
-#         unique_together = (('user', 'book'),)
-#         index_together = (('user', 'book'),)
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="book_review")
+    review = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [['user', 'book']]
 
 
 class BooklistManager(models.Manager):
@@ -171,51 +172,3 @@ class Booklist(models.Model):
 
     def get_absolute_url(self):
         return reverse('books:user_booklist')
-    
-
-
-
-
-
-
-
-
-
-
-
-# from django.db import models
-# # from django.contrib.auth.models import User
-# from django.core.validators import MaxValueValidator, MinValueValidator
-# # Create your models here. 5
-
-# from django.contrib.auth.views import get_user_model
-
-# User = get_user_model()
-
-
-# class Movie(models.Model):
-#     title = models.CharField(max_length=32)
-#     description = models.TextField(max_length=360, blank=True, null=True)
-#     #9
-#     def no_of_ratings(self):
-#         ratings = Rating.objects.filter(movie=self)
-#         return len(ratings)
-#     def avg_rating(self):
-#         ratings = Rating.objects.filter(movie=self)
-#         sum = 0
-#         for rating in ratings:
-#             sum += rating.stars
-#         if len(ratings) > 0:
-#             return sum / len(ratings)
-#         else:
-#             return 0
-
-
-# class Rating(models.Model):
-#     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     stars = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-#     class Meta:
-#         unique_together = (('user', 'movie'),)
-#         index_together = (('user', 'movie'),)
-#         # do makemigrations and migrate

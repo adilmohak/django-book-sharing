@@ -14,7 +14,8 @@
                     </a>
                     <div class="summary py-3">
                         <h6><a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a></h6>
-                        <p class="pb-2 m-0">By: <span class="text-muted">{{ obj.user }}</span> | Author 
+                        <p class="pb-2 m-0">By: 
+                            <a href="{{ obj.user.get_absolute_url }}" class="text-muted">{{ obj.user.get_full_name }}</a> | Author 
                             <span class="text-muted">{{ obj.author }}</span></p>
                         <div class="d-flex text-muted">
                             <small>{% ratings obj %}</small>

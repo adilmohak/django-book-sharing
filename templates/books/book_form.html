@@ -2,9 +2,19 @@
 {% load ratings %}
 
 {% block content %}
+
+{% if form.errors %}
+    {% for error in form.errors %}
+        <div class="alert-auto-dismiss bg-danger" id="alert-auto-dismiss-{{ forloop.counter }}">
+            {{ form.errors }}
+            <button type="submit" class="auto-close" id="auto-close" onclick="autoDesmiss({{ forloop.counter }})">&times;</button>
+        </div>
+    {% endfor %}
+{% endif %}
+
 <br><br><br>
 <div class="container">
-    <h1>{{ form.errors }}</h1>
+    <!-- <h1>{{ form.errors }}</h1> -->
     <h1 class="text-center">Book Form</h1>
     <div class="row">
         <div class="col-md-6 mx-auto p-3">

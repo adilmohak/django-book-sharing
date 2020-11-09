@@ -1,13 +1,8 @@
 from django.contrib import admin
-from .models import Book, Genres
+from .models import Book, Genres, Review, Booklist
 
 
 admin.site.register(Book)
+admin.site.register(Booklist)
 admin.site.register(Genres)
-
-
-# from django.contrib import admin
-# from .models import Movie, Rating #6 make register
-
-# admin.site.register(Movie) #6 new line
-# admin.site.register(Rating) #6 new line
+admin.site.register(Review)

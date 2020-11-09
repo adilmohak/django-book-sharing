@@ -1,0 +1,28 @@
+{% if is_reviewed %}
+<a href="{% url 'books:review_update' slug=obj.slug %}" class="btn btn-outline-primary">&#9998; Edit your review</a>
+{% else %}
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewForm" data-whatever="@getbootstrap">Write a review</button>
+{% endif %}
+
+<div class="modal fade" id="reviewForm" tabindex="-1" role="dialog" aria-labelledby="reviewFormLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reviewFormLabel">New review</h5> 
+        <button data-dismiss="modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form  id="review-form-id" class="review-form" action="{% url 'books:review_create' %}" method="POST" data-url="{% url 'books:review_create' %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" id="id_next" value="{{ request.path }}" required/>
+            <input type="hidden" name="user" id="id_user" value="{{ request.user.id }}" required/>
+            <input type="hidden" name="book" id="id_book" value="{{ obj.id }}" required/>
+            
+            <label for="id_review">Write a review:</label>
+            <textarea class="form-control" name="review" id="id_review" required></textarea><br>
+            <input type="submit" class="btn btn-primary" value="Submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

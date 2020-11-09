@@ -16,13 +16,14 @@
                 </a>
                 <div class="summary py-3">
                     <h6><a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a></h6>
-                    <p class="pb-2 m-0">By: <span class="text-muted">{{ obj.user }}</span> | Author 
+                    <p class="pb-2 m-0">By: 
+                        <a href="{{ obj.user.get_absolute_url }}" class="text-muted">{{ obj.user.get_full_name }}</a> | Author 
                         <span class="text-muted">{{ obj.author }}</span></p>
                     <div class="d-flex text-muted">
                         <small>{% ratings obj %}</small>
                     </div>
                     {% include 'snippets/booklist_form.html' with obj=obj %}
-                    <p>{% if obj.summary %}<small>{{ obj.summary|truncatechars:80 }}</small>{% else %}<span class="text-warning">No summary set to this book.</span>{% endif %}</p>
+                    <p>{% if obj.summary %}<small>{{ obj.summary|truncatechars:80 }}</small>{% else %}<span class="text-warning">No summary set for this book.</span>{% endif %}</p>
                 </div>
             </div>
         </div>
