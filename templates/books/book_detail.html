@@ -74,7 +74,7 @@
                         <small>{% ratings book %}</small>
                     </div>
                     {% include 'snippets/booklist_form.html' with obj=book %}
-                    <p>{% if book.summary %}<small>{{ book.summary|truncatechars:80 }}</small>{% else %}<span class="text-warning">No summary set to this book.</span>{% endif %}</p>
+                    <p>{% if book.summary %}<small>{{ book.summary|truncatechars:80 }}</small>{% else %}<span class="text-warning">No summary set for this book.</span>{% endif %}</p>
                 </div>
             </div>
         </div>
