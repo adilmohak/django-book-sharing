@@ -41,7 +41,7 @@ class BookDetailView(generic.DetailView):
         # context['user_booklist'] = book_list
         context['is_owner'] = self.get_object().is_owner(self.request.user)
         context['reviews'] = Review.objects.filter(book=self.get_object())
-        context['related_books'] = Book.objects.filter(user=self.request.user).order_by('-ratings')
+        context['related_books'] = Book.objects.filter(user=self.get_object().user).order_by('-ratings')
         try:
             context['is_reviewed'] = Review.objects.get(user=self.request.user, book=self.get_object())
         except:

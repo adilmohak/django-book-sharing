@@ -37,7 +37,7 @@
             {% endif %}
         </div>
     </div><br>
-    <h3 class="bg-light p-3">Latest Reviews</h3>
+    <h4 class="bg-light p-3">Latest Reviews</h4>
     <div class="row">
         {% for review in reviews %}
         <div class="col-md-4 mb-4">
@@ -58,7 +58,7 @@
         <div class="alert alert-info">Be the first person to review this book</div>
         {% endfor %}
     </div><br>
-    <h3 class="bg-light p-3">Books from {{ object.user.get_full_name }}</h3>
+    <h5 class="bg-light p-3">Books by {{ object.user.get_full_name }}</h5>
     <div class="row">
         {% for book in related_books %}
         <div class="col-md-6 p-3">
