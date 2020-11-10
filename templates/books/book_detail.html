@@ -11,9 +11,10 @@
         </div>
     {% endfor %}
 {% endif %}
-<br>
-<div class="container pt-5">
-    <div class="row pt-5">
+<br><br><br><br><br>
+
+<div class="container">
+    <div class="row">
         <div class="col-md-6">
             <div class="card">
                 <img src="{{ object.cover_page.url }}" alt="" class="ml-auto" width="400px"/>
@@ -28,6 +29,9 @@
             <div class="d-flex text-muted">
                 <small style="font-size: 16px;">{% ratings object %}</small>
             </div>
+            <br>
+            <div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-width="" data-layout="standard" data-action="like" data-size="large" data-share="true"></div>
+            
             {% include 'snippets/booklist_form.html' with obj=object %}
             {% include 'snippets/review_form.html' with obj=object %}
 
@@ -37,7 +41,7 @@
             {% endif %}
         </div>
     </div><br>
-    <h4 class="bg-light p-3">Latest Reviews</h4>
+    <h4>Latest Reviews</h4>
     <div class="row">
         {% for review in reviews %}
         <div class="col-md-4 mb-4">
@@ -58,7 +62,12 @@
         <div class="alert alert-info">Be the first person to review this book</div>
         {% endfor %}
     </div><br>
-    <h5 class="bg-light p-3">Books by {{ object.user.get_full_name }}</h5>
+
+    <center>
+        <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5" data-width=""></div>
+    </center> <br>
+
+    <h5>Books by {{ object.user.get_full_name }}</h5>
     <div class="row">
         {% for book in related_books %}
         <div class="col-md-6 p-3">
