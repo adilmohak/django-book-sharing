@@ -17,13 +17,12 @@ The app also recommend books depending on the user interest. I used Bootstrap fo
 * Book recommendation depending on your interest
 * One of the coolest feature of this app is a MultiModel search engine. You can search Books, Users, and News and Events in a single search engine
 
-![Screenshot (128)](https://user-images.githubusercontent.com/60693922/112545329-272aee80-8dc9-11eb-9a04-755120f5bd35.png)
+![Screenshot (137)](https://user-images.githubusercontent.com/60693922/112548449-4e83ba80-8dcd-11eb-9807-2da98b29836d.png)
 
-![Screenshot (130)](https://user-images.githubusercontent.com/60693922/112545369-3316b080-8dc9-11eb-809a-157a8af280bd.png)
+![Screenshot (138)](https://user-images.githubusercontent.com/60693922/112548466-58a5b900-8dcd-11eb-8d22-915fcd0c39bc.png)
 
-![Screenshot (131)](https://user-images.githubusercontent.com/60693922/112545410-3d38af00-8dc9-11eb-91be-8bd57ee47f58.png)
+![Screenshot (136)](https://user-images.githubusercontent.com/60693922/112548491-5fccc700-8dcd-11eb-8519-34d199a60d4e.png)
 
-![Screenshot (132)](https://user-images.githubusercontent.com/60693922/112545740-a02a4600-8dc9-11eb-8619-eef43e31918f.png)
 
 # Installation
 First Clone the repo with 
@@ -35,6 +34,9 @@ Run the following commands
 
 Finally go to this address http://127.0.0.1:8000
 
-![Screenshot (133)](https://user-images.githubusercontent.com/60693922/112546962-30b55600-8dcb-11eb-88d2-900ac5835718.png)
+![Screenshot (135)](https://user-images.githubusercontent.com/60693922/112548543-7541f100-8dcd-11eb-9add-63e40478e513.png)
+
+![Screenshot (134)](https://user-images.githubusercontent.com/60693922/112548557-78d57800-8dcd-11eb-844e-9aa2d162dbf9.png)
+
 
 # Thanks
