@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load ratings %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-auto-dismiss" id="alert-auto-dismiss-{{ forloop.counter }}">
+            {{ message }}
+            <button type="submit" class="auto-close" id="auto-close" onclick="autoDesmiss({{ forloop.counter }})">&times;</button>
+        </div>
+    {% endfor %}
+{% endif %}
+<br><br><br><br><br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <img src="{{ object.cover_page.url }}" alt="" class="ml-auto" width="400px"/>
+            </div>
+        </div>
+        <div class="col-md-6 mr-auto">
+            <h3><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></h3>
+            <p class="pb-2 m-0">By :
+                <a href="{{ object.user.get_absolute_url }}" class="text-muted">{{ object.user.get_full_name }}</a> 
+                [ Author : <span class="text-muted">{{ object.author }} ]</span>
+            </p>
+            <div class="d-flex text-muted">
+                <small style="font-size: 16px;">{% ratings object %}</small>
+            </div>
+            
+            <br>
+            <div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-width="" data-layout="standard" data-action="like" data-size="large" data-share="true"></div>
+            
+            {% include 'snippets/booklist_form.html' with obj=object %}
+            {% include 'snippets/review_form.html' with obj=object %}
+
+            <p>{% if object.summary %}{{ object.summary }}{% else %}No summary set for this book.{% endif %}</p>
+            {% if is_owner %}
+            <a href="{% url 'books:update' slug=object.slug %}" style='font-size:30px; float: right; position: absolute; top: 20px; right: 20px;'>&#9998;</a>
+            {% endif %}
+        </div>
+    </div><br>
+    <h4>Latest Reviews</h4>
+    <div class="row">
+        {% for review in reviews %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <a href="{{ review.user.get_absolute_url }}" class="bg-dark text-light text-center p-2">
+                    <img src="{{ review.user.image.url }}" alt="" class="mr-3" style="width: 60px; height: 60px; border-radius: 50%;"/>
+                    {{ review.user.get_full_name }}
+                </a>
+                <div class="p-3">
+                    <p class="pb-2 m-0 text-muted">{{ review.timestamp|timesince }} ago</p>
+                    <p>
+                        {{ review.review }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">Be the first person to review this book</div>
+        {% endfor %}
+    </div><br>
+
+    <center>
+        <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5" data-width=""></div>
+    </center> <br>
+
+    <h5>Books by {{ object.user.get_full_name }}</h5>
+    <div class="row">
+        {% for book in related_books %}
+        <div class="col-md-6 p-3">
+            <div class="book-card">
+                <a href="{{ book.get_absolute_url }}">
+                    <img src="{{ book.cover_page.url }}" alt="" class="cover-page"/>
+                </a>
+                <div class="summary py-3">
+                    <h6><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></h6>
+                    <p class="pb-2 m-0">By: <a href="{{ book.user.get_absolute_url }}" class="text-muted">{{ book.user }}</a> | Author 
+                        <span class="text-muted">{{ book.author }}</span></p>
+                    <div class="d-flex text-muted">
+                        <small>{% ratings book %}</small>
+                    </div>
+                    {% include 'snippets/booklist_form.html' with obj=book %}
+                    <p>{% if book.summary %}<small>{{ book.summary|truncatechars:80 }}</small>{% else %}<span class="text-warning">No summary set for this book.</span>{% endif %}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">{{ object.user.get_full_name }} has no book yet.</div>
+        {% endfor %}
+    </div>
+</div>
+<br><br><br>
+{% endblock %}

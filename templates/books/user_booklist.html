@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load ratings %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-auto-dismiss" id="alert-auto-dismiss-{{ forloop.counter }}">
+            {{ message }}
+            <button type="submit" class="auto-close" id="auto-close" onclick="autoDesmiss({{ forloop.counter }})">&times;</button>
+        </div>
+    {% endfor %}
+{% endif %}
+<br><br><br><br><br>
+
+<div class="container">
+  <div class="display-4">Booklist</div>
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Book Title</th>
+            <th scope="col">Book by</th>
+            <th scope="col">Author</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for book in booklist.books.all %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
+            <td>{{ book.user }}</td>
+            <td>{{ book.author }}</td>
+            <td>
+              <form id="form-booklist-ajax" method="POST" action="{% url 'books:user_booklist_update' %}" data-endpoint="{% url 'books:user_booklist_update' %}"> {% csrf_token %}
+                <input type="hidden" name="book_id" id="book_id" value="{{ book.id }}"/>
+
+                <button type="submit" style="background: transparent; border: none;">
+                  <span class="delete-btn" title="Remove this book">&#10005;</span>
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <th scope="row"></th>
+            <td></td>
+            <td class="alert alert-info"> You have no book in your booklist, start by adding one.</td>
+            <td></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+</div>
+<br><br><br><br>
+{% endblock %}

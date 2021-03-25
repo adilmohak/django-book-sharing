@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load ratings %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-auto-dismiss" id="alert-auto-dismiss-{{ forloop.counter }}">
+            {{ message }}
+            <button type="submit" class="auto-close" id="auto-close" onclick="autoDesmiss({{ forloop.counter }})">&times;</button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<br><br><br><br><br>
+<div class="container">
+    <div class="title-1">Recommended Books by the Fidel community</div>
+    <p class="text-warning">Improve recommendations by adding books to your booklist and rating books.</p>
+    <div class="row">
+        {% for obj in sorted_recomended_books %}
+            <div class="col-md-6 p-3">
+                <div class="book-card">
+                    <a href="{{ obj.get_absolute_url }}">
+                        <img src="{{ obj.cover_page.url }}" alt="" class="cover-page"/>
+                    </a>
+                    <div class="summary py-3">
+                        <h6><a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a></h6>
+                        <p class="pb-2 m-0">By: 
+                            <a href="{{ obj.user.get_absolute_url }}" class="text-muted">{{ obj.user.get_full_name }}</a> | Author 
+                            <span class="text-muted">{{ obj.author }}</span></p>
+                        <div class="d-flex text-muted">
+                            <small>{% ratings obj %}</small>
+                        </div>
+                        {% include 'snippets/booklist_form.html' with obj=obj %}
+                        <p>{% if obj.summary %}<small>{{ obj.summary|truncatechars:80 }}</small>{% else %}<span class="text-warning">No summary set to this book.</span>{% endif %}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

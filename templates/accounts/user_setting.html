@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Setting | ACO{% endblock title %}
+{% load static %}
+
+{% block content %}
+
+<br><br><br>
+<div class="container">
+<p class="display-4 text-center">Account Settings <i class="fas fa-cogs text-orange"></i></p>
+
+{% if form.errors %}<div class="alert alert-danger">Please correct the error(s) below</div>{% endif %}
+<form class="text-dark" action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <div class="row mb-4 text-dark">
+        <div class="col-md-6 mx-auto">
+            <div class="card p-2">
+                {{ form.email.label }}<br>{{ form.email }} <span class="text-danger">{{ form.email.errors }}</span><hr>
+                {{ form.name.label }}<br>{{ form.name }} <span class="text-danger">{{ form.name.errors }}</span><hr>
+                {{ form.location.label }}<br>{{ form.location }} <span class="text-danger">{{ form.location.errors }}</span><hr>
+                {{ form.image.label }}<br>{{ form.image }} <span class="text-danger">{{ form.image.errors }}</span><hr>
+            </div>
+        </div>
+    </div>
+
+    <center>
+        <button class="btn btn-primary" type="submit">Save</button>
+    </center>
+</form>
+</div>
+<br><br><br>
+
+{% endblock content %}

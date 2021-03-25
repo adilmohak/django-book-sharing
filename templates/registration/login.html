@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Login - djBooks{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row py-5 my-5">
+        <div class="col-md-8 border-right">
+            <h1 class="display-4">LogIn</h1> <br>
+            {% if form.errors %}
+            <p class="text-danger"><i class="fas fa-exclamation-circle"></i> Invalid Email & Password.</p>
+            {% endif %}
+            <form action="" method="POST" id="form-login">{% csrf_token %}
+              <label for="id_username">Email address:</label>
+              <input type="text" class="form-control" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="255" required id="id_username"> 
+              
+              <label for="id_password">Password:</label>
+              <input type="password" class="form-control" name="password" autocomplete="current-password" required id="id_password">
+              <hr>
+              <button type="submit" class="btn btn-primary" id="login-btn">LogIn</button>
+            </form>
+            <p><a href="{% url 'password_reset' %}">Forgot password ?</a></p>
+            <p class="text-muted">New for Fidel ?<a href="{% url 'accounts:create_account' %}"> Register here</a></p>
+        </div>
+        <div class="col-md-4">
+            <ul class="lead">
+                <li>Read books</li>
+                <li>Get recommendations</li>
+                <li>Group discussion</li>
+                <li>Friends</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+  const formLogin = document.getElementById('form-login');
+  const loginBtn = document.getElementById('login-btn');
+
+  formLogin.addEventListener('submit', () => {
+    loginBtn.innerHTML =  "Signining you in... please wait.";
+    loginBtn.classList.add('disabled');
+  })
+</script>
+{% endblock js %}

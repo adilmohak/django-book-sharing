@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}Search result for {{ query }} | Fidele Books{% endblock title %}
+
+{% load class_name %}
+
+{% block content %}
+
+<br><br><br><br>
+<div class="container">
+<div class="col-md-7 mx-auto">
+<div class="card p-3">
+    <h6 class="text-muted m-0">About {{ count }} results for <b><em class="text-orange"> <mark>{{ query }}</mark></em></b></h6> <br>
+
+    <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">All</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="books-tab" data-toggle="tab" href="#books" role="tab" aria-controls="books" aria-selected="false">Books</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="users-tab" data-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="false">Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="news-tab" data-toggle="tab" href="#news" role="tab" aria-controls="news" aria-selected="false">News & Events</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">    
+            {% for object in object_list %}
+            {% with object|class_name as klass %}
+            {% if klass == 'Book' %}
+                <div class="session-wrapper">
+                    <div class="session"><div class="info-text bg-orange">Book</div></div>
+                </div>
+                <div class='col-12 class-item'>
+                    <h4><a href='{{ object.get_absolute_url }}'><b>{{ object.title}}</b></a></h4>
+                    <p>{{ object.summary }}</p>
+                </div><hr>
+    
+            {% elif klass == 'User' %}
+                <div class="info-text bg-orange">User</div>
+                <div class='col-12 class-item'>
+                    <p><a href='{{ object.get_absolute_url }}'>{{ object.get_full_name }}</a></p>
+                </div><hr>
+                
+            {% elif klass == 'NewsAndEvent' %}
+                <div class="info-text bg-orange">News And Events</div>
+                <div class='col-12 class-item'>
+                    <p><b>Date: </b> {{ object.timestamp|timesince }} ago</p>
+                    <h4><b>{{ object.title }}</b></h4>
+                    <p>{{ object.summary }}</p>
+                </div><hr>
+    
+            {% else %}
+                <div class='col-12 col-lg-8 offset-lg-4'>
+                    <a href='{{ object.get_absolute_url }}' class="class-item d-flex">{{ object }} | {{ object|class_name }}</a>
+                </div><hr>
+                <div class='col-12 class-item'>
+                    <h4><a href='{{ object.get_absolute_url }}'>{{ object }} | <b>{{ object|class_name }}</b></a></h4>
+                    <p>{{ object.description }}</p>
+                </div><hr>
+            {% endif %}
+    
+            {% endwith %}
+    
+            {% empty %}
+            
+                <p class="text-center py-2">No book, user, or news & events match for your search</p>
+                <div class='col-12 col-md-6 mx-auto my-3 py-2'>
+                <form method='GET' class='' action='.'>
+                    <div class="input-group form-group-no-border mx-auto">
+                        <input type="text" name="q" data-toggle="popover" data-placement="bottom" data-content="Press enter to search" class="form-control cfe-nav mt-0 py-3" placeholder="Search..." value="{{ request.GET.q }}" data-original-title="" title="" autofocus="autofocus" required>
+                        <button type="submit" class="btn btn-outline-secondary">Search</button>
+                    </div>
+                </form>
+            
+                </div>
+                <div class="col-12 pl-5">
+                <h5>Search by using:</h5>
+                <ul class="pl-3">
+                    <li>Search books using Book title or summary or book author</li>
+                    <li>Search peoples/users using their name or email or location.</li>
+                    <li>Search News And Events using the title, description or just by typing "news" or "event"</li>
+                </ul>
+                </div>
+            
+            {% endfor %}
+    </div>
+    <div class="tab-pane fade" id="books" role="tabpanel" aria-labelledby="books-tab">
+        {% for object in object_list %}
+        {% with object|class_name as klass %}
+        {% if klass == 'Book' %}
+            <div class="session-wrapper">
+                <div class="session"><div class="info-text bg-orange">Book</div></div>
+            </div>
+            <div class='col-12 class-item'>
+                <h4><a href='{{ object.get_absolute_url }}'><b>{{ object.title}}</b></a></h4>
+                <p>{{ object.summary }}</p>
+            </div><hr>
+        {% endif %}
+        {% endwith %}
+    
+        {% empty %}
+            <div class="alert alert-info">No book matchs for your search.</div>
+        {% endfor %}
+    </div>
+    <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
+        {% for object in object_list %}
+        {% with object|class_name as klass %}
+        {% if klass == 'User' %}
+            <div class="session-wrapper">
+                <div class="session"><div class="info-text bg-orange">User</div></div>
+            </div>
+            <div class='col-12 class-item'>
+                <h4><a href='{{ object.get_absolute_url }}'><b>{{ object.get_full_name }}</b></a></h4>
+                <p>Location : {{ object.location }}</p>
+            </div><hr>
+        {% endif %}
+        {% endwith %}
+    
+        {% empty %}
+            <div class="alert alert-info">No user matchs for your search.</div>
+        {% endfor %}
+    </div>
+    <div class="tab-pane fade" id="news" role="tabpanel" aria-labelledby="news-tab">
+        {% for object in object_list %}
+        {% with object|class_name as klass %}
+        {% if klass == 'NewsAndEvent' %}
+            <div class="session-wrapper">
+                <div class="session"><div class="info-text bg-orange">News and Events</div></div>
+            </div>
+            <div class='col-12 class-item'>
+                <h4><a href='{{ object.get_absolute_url }}'><b>{{ object.title }}</b></a></h4>
+                <li>{{ object.timestamp|timesince }}</li>
+                <p>{{ object.summary }}</p>
+            </div><hr>
+        {% endif %}
+        {% endwith %}
+        {% endfor %}
+    </div>
+    </div>
+</div>
+</div>
+</div>
+<br><br><br><br>
+{% endblock content %}

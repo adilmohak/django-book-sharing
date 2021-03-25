@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}{{ request.user.get_full_name }} - djBooks{% endblock title %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-auto-dismiss" id="alert-auto-dismiss-{{ forloop.counter }}">
+            {{ message }}
+            <button type="submit" class="auto-close" id="auto-close" onclick="autoDesmiss({{ forloop.counter }})">&times;</button>
+        </div>
+    {% endfor %}
+{% endif %}
+<br><br><br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 p-2">
+            <div class="card p-3">
+                <img src="{{ object.image.url }}" alt="" class="mx-auto img-rounded" width="200px" style="max-width: 200px;">
+                <p class="text-center lead"> {{ object.get_full_name }}</p>
+                - Full Name : {{ object.name }} <br>
+                - Location/Address : {{ object.location }}
+                <div class="text-muted p-2 border mb-3">
+                    <li>{{ detail_user_books.count }} books </li>
+                    <li>{{ detail_user_booklist.books.all.count }} books in <a href="#">booklist</a></li>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 p-2">
+            <div class="card p-3 mb-3">
+                <p class="lead">Books by {{ object.get_full_name }} ({{ detail_user_books.count }}) </p>
+                <table class="table table-responsive table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Book Title</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Uploaded Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for book in detail_user_books %}
+
+                      <tr class="text-muted">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.timestamp|timesince }} ago</td>
+                      </tr>
+                      {% empty %}
+                      <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td class="alert alert-warning"> {{ user.get_full_name }} have no book. </td>
+                        <td></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card p-3">
+                <p class="lead">Booklist ({{ detail_user_booklist.books.all.count }})</p>
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Book Title</th>
+                        <th scope="col">Book by</th>
+                        <th scope="col">Author</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for book in detail_user_booklist.books.all %}
+                      <tr class="text-muted">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
+                        <td>{{ book.user }}</td>
+                        <td>{{ book.author }}</td>
+                      </tr>
+                      {% empty %}
+                      <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td class="alert alert-warning"> {{ user.get_full_name }} have no book in his/her booklist. </td>
+                        <td></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody> 
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br><br>
+
+{% endblock %}

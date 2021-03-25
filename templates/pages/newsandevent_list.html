@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}News & Events | Fidel{% endblock title %}
+{% load static %}
+{% load text_toggler %}
+
+{% block content %}
+
+<br><br><br><br><br><br>
+
+<!-- news and events -->
+
+<style>.more{display: none}</style>
+
+<div class="site-section">
+  <div class="container" style="max-width: 960px;">
+    <h2 class="heading-title">NEWS & EVENTS</h2>
+    <div class="title-line mb-3"></div>
+    <p class="mb-5">
+      The latest news and events.
+    </p>
+    <div class="row">
+
+      {% for item in items %}
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="card-title-wrapper">
+              <b>{{ item.title|title }}</b>
+              <small>{{ item.posted_as }}</small>
+              <p><div class="text-muted">{{ item.timestamp|timesince }} ago</div></p>
+            </div>
+            {% get_first_word item.summary %}<span class="dots">...</span><span class="more">{% get_remain_word item.summary %}</span>
+            <button class="read btn btn-warning">Read more</button>
+
+          </div>
+
+        </div>
+      </div>
+      {% empty %}
+      <div class="alert alert-info mx-auto">No news and events yet.</div>
+      {% endfor %}
+
+      <div class="col-12 text-right see-more"><a href="{% url 'pages:news_events' %}">See more. . . <span>&raquo;</span></a></div>
+
+    </div>
+  </div>
+</div>
+<br><br><br><br>
+{% endblock %}
+
+{% block js %}
+<script>
+  $(document).ready(function(){
+    $('.read').click(function(){
+      $(this).prev().toggle();
+      $(this).siblings('.dots').toggle();
+      if($(this).text()=='Read more'){
+        $(this).text('Read less');
+      }
+      else{
+        $(this).text('Read more');
+      };
+    });
+  });
+</script>
+{% endblock js %}

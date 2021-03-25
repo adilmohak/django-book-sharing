@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load ratings %}
+
+{% block content %}
+
+{% if form.errors %}
+    {% for error in form.errors %}
+        <div class="alert-auto-dismiss bg-danger" id="alert-auto-dismiss-{{ forloop.counter }}">
+            {{ form.errors }}
+            <button type="submit" class="auto-close" id="auto-close" onclick="autoDesmiss({{ forloop.counter }})">&times;</button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<br><br><br>
+<div class="container">
+    <!-- <h1>{{ form.errors }}</h1> -->
+    <h1 class="text-center">Book Form</h1>
+    <div class="row">
+        <div class="col-md-6 mx-auto p-3">
+            <form enctype="multipart/form-data" action="" method="POST">{% csrf_token %}
+                <!-- {{ form.user }} -->
+                {{ form.user }}
+                {{ form.title.label }}{{ form.title }}
+                <span class="text-danger">{{ form.title.errors }}</span>
+                <hr>
+                {{ form.author.label }}{{ form.author }}
+                <span class="text-danger">{{ form.author.errors }}</span>
+                <hr>
+                {{ form.summary.label }}{{ form.summary }}
+                <span class="text-danger">{{ form.summary.errors }}</span>
+                <hr>
+                {{ form.genres.label }}{{ form.genres }}
+                <span class="text-danger">{{ form.genres.errors }}</span>
+                <hr>
+                {{ form.cover_page.label }} : {{ form.cover_page }}
+                <span class="text-danger">{{ form.cover_page.errors }}</span>
+                <hr>
+                
+                <input type="submit" class="btn btn-lg btn-primary" value="Save">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

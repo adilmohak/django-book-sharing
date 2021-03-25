@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block title %}{{ request.user.get_full_name }} - djBooks{% endblock title %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+
+<style>
+  .delete-btn {font-size: 10px; padding: 3px 7px;border: 1px solid transparent;border-radius: 50%;color: transparent;}
+  tr:hover .delete-btn {border-color: #afafaf; color: #000; background: #fff;}
+  .delete-btn:hover {background: rgb(28, 104, 175) !important; color: #fff !important;}
+  @media (max-width: 1000px) {
+    .delete-btn {
+      border: 1px solid #afafaf !important;
+      color: #000 !important;
+    }
+  }
+</style>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-auto-dismiss" id="alert-auto-dismiss-{{ forloop.counter }}">
+            {{ message }}
+            <button type="submit" class="auto-close" id="auto-close" onclick="autoDesmiss({{ forloop.counter }})">&times;</button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="container">
+    <h1 class="title-1 py-4 pl-3 text-light bg-gradient-sky"><br> Welcom {{ user.get_full_name }}</h1>
+    <div class="row">
+        <div class="col-md-3 p-2">
+            <div class="card p-3">
+                <img src="{{ user.image.url }}" alt="" class="mx-auto img-rounded" width="200px" style="max-width: 200px;">
+                <p class="text-center lead"> {{ user.get_full_name }}</p>
+                - Full Name {{ user.name }} <br>
+                - Location/Address {{ user.location }}
+                <div class="text-muted p-2 border mb-3">
+                    <li>{{ user_books.count }} books </li>
+                    <li>{{ book_list_obj.books.all.count }} books in <a href="#">booklist</a></li>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'accounts:change_password' %}" class="btn btn-sm btn-outline-secondary"> <span>&#128273; <small>Password</small></span></a>
+                    <a href="{% url 'accounts:update_account' %}" class="btn btn-sm btn-outline-secondary"> <span>&#9881;</span> <small>Setting</small></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 p-2">
+            <div class="card p-3 mb-3">
+                <p class="lead">Books by {{ user.get_full_name }} ({{ user_books.count }}) <a href="{% url 'books:create' %}" class="btn btn-primary" style="float: right">&#43; Add book</a></p>
+                <table class="table table-responsive table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Book Title</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Uploaded Date</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for book in user_books %}
+
+                      <tr class="text-muted">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.timestamp|timesince }} ago</td>
+                        <td>
+                          <a href="{% url 'books:update' slug=book.slug %}" title="Edit"><span class="delete-btn">&#9998;</span></a> 
+                          <a href="{% url 'books:delete' slug=book.slug %}" title="Delete"><span class="delete-btn">&#10005;</span></a>
+                        </td>
+                      </tr>
+                      {% empty %}
+                      <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td class="alert alert-warning"> You have no book, start by creating one. </td>
+                        <td></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card p-3">
+                <p class="lead">Booklist ({{ book_list_obj.books.all.count }})</p>
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Book Title</th>
+                        <th scope="col">Book by</th>
+                        <th scope="col">Author</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for book in book_list_obj.books.all %}
+                      <tr class="text-muted">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
+                        <td>{{ book.user }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>
+                          <!-- <form  id="booklist-form-id" class="booklist-form" action="{% url 'books:user_booklist_update' %}" method="POST" data-url="{% url 'books:user_booklist_update' %}">
+                            <input type="hidden" name="book_id" id="id_book" value="{{ book.id }}" {% if  product.is_digital %}data-is-digital="true"{% endif%}/>
+                            <button type="submit" class="btn">
+                              <span class="delete-btn">&#10005;</span>
+                            </button>
+                          </form> -->
+                          <form id="form-booklist-ajax" method="POST" action="{% url 'books:user_booklist_update' %}" data-endpoint="{% url 'books:user_booklist_update' %}"> {% csrf_token %}
+                            <input type="hidden" name="book_id" id="book_id" value="{{ book.id }}"/>
+
+                            <input type="hidden" name="next" id="next" value="{% url 'accounts:user_profile' %}"/>
+                            <button type="submit" style="background: transparent; border: none;">
+                              <span class="delete-btn">&#10005;</span>
+                            </button>
+                          </form>
+                        </td>
+                      </tr>
+                      {% empty %}
+                      <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td class="alert alert-warning"> You have no book in your booklist, start by adding one. </td>
+                        <td></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody> 
+                </table><a href="{% url 'books:user_booklist' %}">Display more</a>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br><br>
+
+{% endif %}
+
+{% endblock %}

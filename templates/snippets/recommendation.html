@@ -1,0 +1,78 @@
+{% load ratings %}
+<style>
+    @media (max-width: 700px){
+        .row {
+            display: block;
+        }
+    }
+</style>
+
+<div class="row">
+    {% for obj in sorted_recomended_books %}
+        <div class="col-md-6 p-3">
+            <div class="book-card">
+                <a href="{{ obj.get_absolute_url }}">
+                    <img src="{{ obj.cover_page.url }}" alt="" class="cover-page"/>
+                </a>
+                <div class="summary py-3">
+                    <h6><a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a></h6>
+                    <p class="pb-2 m-0">By: 
+                        <a href="{{ obj.user.get_absolute_url }}" class="text-muted">{{ obj.user.get_full_name }}</a> | Author 
+                        <span class="text-muted">{{ obj.author }}</span></p>
+                    <div class="d-flex text-muted">
+                        <small>{% ratings obj %}</small>
+                    </div>
+                    {% include 'snippets/booklist_form.html' with obj=obj %}
+                    <p>{% if obj.summary %}<small>{{ obj.summary|truncatechars:80 }}</small>{% else %}<span class="text-warning">No summary set for this book.</span>{% endif %}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+<!-- <div class="d-block py-3" id="r-books">Loding recommendations...</div> -->
+
+
+<!-- <script>
+const recommandBooksEl = document.getElementById('r-books');
+
+
+function loadRecommendations(booksElement){
+    const xhr = new XMLHttpRequest();
+    const method = 'GET';
+    const url = '/api/books/recommendation/';
+    const responseType = "json";
+
+    xhr.responseType = responseType;
+    xhr.open(method, url);
+
+    function formatedItemEl(book){
+        var formatedItem =  
+            "<div class='col-6 d-flex align-items-center border p-0 m-3'>" + 
+                "<a href='#'><img src=' " + book.cover_page + " ' alt='' width='100px' class='cover-page'></a>" +
+                "<div class='card-summary mx-2'>" +
+                    "<p><a href='#'><b>" + book.title + "{{ " + `${book.title}|safe` + " }} </b></a></p>" +
+                    "<small>By: <a href='#' class='text-muted'>" + book.user + "</a>" + 
+                        " | Author: <span class='text-muted'> " + book.author + "</span></small>" +
+                    "<p>&#9733; &#9733; &#9733; &#9733; &#9733; <small class='text-muted'> 2,342 rating 5,343 review</small></p>" +
+                    "<p>" + book.summary + "...</p>" +
+                "</div>" +
+            "</div>"
+        return formatedItem;
+    };
+
+    xhr.onload = function() {
+        const serverResponse = xhr.response;
+        var final_list = "";
+        for(var i=0; i<serverResponse.length; i++){
+            final_list += "<div class='row'>" + formatedItemEl(serverResponse[i]) + "</div>";
+        };
+        booksElement.innerHTML = final_list;
+    };
+    
+    xhr.send();
+};
+loadRecommendations(recommandBooksEl);
+
+</script> -->

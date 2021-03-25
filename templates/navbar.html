@@ -1,0 +1,181 @@
+{% load static %}
+
+<style>
+  #navbar {background: #ffffffb3; transition: .5s;}
+  .nav-link {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid transparent;
+  }
+  .shadow-bottom {
+      box-shadow: 0 10px 10px 0px #e2e2e2;
+  }
+  .nav-link:hover, .active {
+      color: #38a3d4 !important;
+      border-bottom-color: #38a3d4;
+      transition: .2s;
+  }
+  .header-s-btn {
+      border-top-right-radius: 2em;
+      border-bottom-right-radius: 2em;
+      border: 1px solid #ddd;
+      background: #fff;
+      color: gray;
+      margin-left: -5px;
+  }
+  #navbar-brand-wrapper {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    color: #fff !important;
+    background: rgb(162, 5, 253);
+    text-align: center;
+    border-radius: 0 40px 5px;
+    transition: .5s;
+  }
+  @media (max-width: 1000px) {
+    #navbar {background: #fff !important;}
+    #navbar-brand-wrapper small {
+      display: none !important;
+    }
+  }
+</style>
+
+<nav id="navbar" class="navbar navbar-expand-xl navbar-light py-0 fixed-top">
+    <div class="mr-5">F</div>
+    <a class="navbar-brand" id="navbar-brand-wrapper" href="/">Fidele <br> <small style="font-size: 12px;">READ WITH US</small></a>
+    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse pl-5" id="navbarsExampleDefault">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Home</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Book</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href="{% url 'books:books' %}">All Books</a>
+            <a class="dropdown-item" href="{% url 'books:recommendation' %}">Recommendations</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'pages:news_events' %}">News & Events</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="{% url 'pages:about' %}">About</a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'pages:contact' %}">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#faq" data-toggle="modal" data-target="#faq">FAQ</a>
+        </li>
+      </ul>
+
+      <form class="form-inline d-flex" action="{% url 'searchs:query' %}" method="GET">
+        <input class="form-control" type="text" name="q" value="{{ request.GET.q }}" placeholder="Search Fidele..." required/>
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
+
+      <ul class="navbar-nav ml-auto">
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link bg-light" href="{% url 'books:user_booklist' %}">My BookList</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="btn btn-sm btn-light dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="{{ user.image.url }}" alt="" width="35px" style="max-height: 35px;">
+            {{ request.user.get_full_name|truncatechars:7 }}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href="{% url 'accounts:user_profile' %}">Profile</a>
+            <a class="dropdown-item" href="{% url 'books:user_booklist' %}">My BookList</a>
+            <div class="text-muted text-center bg-light">Settings</div>
+            <a class="dropdown-item" href="{% url 'accounts:update_account' %}">Settings</a>
+            <a class="dropdown-item" href="{% url 'accounts:change_password' %}">Change password</a>
+            <p class="text-muted text-center bg-light">Book</p>
+            <a href="{% url 'books:create' %}" class="btn btn-primary ml-4">&#43; Create book</a>
+            <hr/>
+            <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+          </div>
+        </li>
+        {% else %}
+        <div class="d-flex justify-content-center align-items-center">
+            <a class="btn btn-light mr-2" href="{% url 'accounts:login' %}">Login</a>
+            <a class="btn btn-primary" href="{% url 'accounts:create_account' %}">&plus; Join now</a>
+        </div>
+        {% endif %}
+      </ul>
+
+    </div>
+</nav>
+
+<div class="modal fade" id="faq" tabindex="-1" role="dialog" aria-labelledby="faqLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="faqLabel">FAQ (Frequently asked questions)</h5> 
+        <button data-dismiss="modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <span><h6 class="alert alert-info">Fidele announce you a highly rated book every month</h6></span><br>
+        <b>What is Fidele Books</b>
+        <ul>
+          <li class="lead">
+            Fidel Books is a Platform that allows you to connect with other like
+            minded readers, swap books, discuss, comment and review books.
+          </li>
+        </ul>
+        <span><b>How Fidele works</b> (step by step)</span>
+        <ul>
+          <li>Create free account</li>
+          <li>Add your book if you have</li>
+          <li>Add books to your booklist</li>
+          <li>Rate books you like</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    // When the user scrolls the page, execute myFunction
+    window.onscroll = function() {myFunction()};
+
+    // Get the navbar
+    var navbar = document.getElementById("navbar");
+    var navbarBrand = document.getElementById("navbar-brand-wrapper");
+
+    // Get the offset position of the navbar
+    var sticky = navbar.offsetTop;
+
+    // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+    function myFunction() {
+    if (window.pageYOffset >= 50) {
+        navbar.style.background = "#fff";
+        navbarBrand.style.padding = "10px";
+        navbarBrand.childNodes[3].style.display = 'none';
+        navbar.classList.add("shadow-bottom");
+    } else {
+        navbar.style.background = "#ffffffb3";
+        navbarBrand.style.padding = "20px";
+        navbarBrand.childNodes[3].style.display = 'block';
+        navbar.classList.remove("shadow-bottom");
+    }
+    }
+    
+    // FAQ
+    // Get the modal
+    var modal = document.getElementById('id01');
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
