@@ -153,32 +153,16 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'staticfiles')
 
-# STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static"),
-# ]
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CORS_URLS_REGEX = r'^/api.*'
 CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = (
-#     '*',
-#     'your-domain.com',
-#     'your-bucket-here.s3-us-west-2.amazonaws.com',
-# )
 
 # Dev
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:8000',
     'http://localhost:3000'
 )
-
-# # production
-# CORS_ORIGIN_WHITELIST = (
-#     'https://api.ara.example.org',
-#     'https://web.ara.example.org'
-# )
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -197,10 +181,6 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 # DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 # SERVER_EMAIL = os.environ.get('SERVER_EMAIL')
-
-# development setup
-# EMAIL_HOST_USER = 'adilmohak123@gmail.com'
-# EMAIL_HOST_PASSWORD = 'unlockin321@gmail'
 
 LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
