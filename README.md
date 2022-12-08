@@ -27,5 +27,6 @@ Run the following commands
 
 Finally go to this address http://127.0.0.1:8000
 
-## Support me with your mighty star ✨
+## Feel free to contribute 👨‍💻👨‍💻
+## Support me with your mighty star ✨🤩
 # Thanks
