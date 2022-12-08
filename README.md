@@ -12,7 +12,6 @@ The app also recommend books depending on the user interest. I used Bootstrap fo
 * Like
 * Write/edit a review for each book
 * Creat and add books to your Booklist(shelf)
-* Add books to your Booklist
 * Book recommendation depending on your interest
 * Multi model search engine. You can search Books, Users, and News and Events in a single search input
 
