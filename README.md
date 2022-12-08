@@ -4,13 +4,13 @@ This project is a **django** app that allows users to share, discuss, rate, like
 The app also recommend books depending on the user interest. I used Bootstrap for the front-end part
 
 # Current features
+* User management
 * News and Events
 * Add Books
-* Share >>
-* Rate >>
-* Like >>
-* Write a review for each book
-* Edit your review
+* Share
+* Rate/Review
+* Like
+* Write/edit a review for each book
 * Creat and add books to your Booklist(shelf)
 * Add books to your Booklist
 * Book recommendation depending on your interest
