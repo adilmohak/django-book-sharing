@@ -5,63 +5,54 @@ from django.views import generic
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    UserChangeForm,
+    PasswordChangeForm,
+)
 from django.views.generic import View, FormView
 
 from django.http import JsonResponse
 from django.core import serializers
 
 from books.models import Book, Booklist
-from .mixins import UserCreateAjaxFormMixin
+
+# from .mixins import UserCreateAjaxFormMixin
 from .forms import UserUpdateForm, UserCreateForm
 from .models import User
 
 
-class CreateUserView(UserCreateAjaxFormMixin, generic.FormView):
+class CreateUserView(generic.FormView):
     # model = User
     # fields = ['email', 'password']
     form_class = UserCreateForm
-    template_name = 'accounts/user_form.html'
-    success_url = '/accounts/profile/'
+    template_name = "accounts/user_form.html"
+    success_url = "/accounts/profile/"
 
-    # def form_invalid(self, form):
-    #     response = super(CreateUserView, self).form_invalid(form)
-    #     if self.request.is_ajax():
-    #         return JsonResponse(form.errors, status=400)
-    #     else:
-    #         return response
+    def form_invalid(self, form):
+        response = super(CreateUserView, self).form_invalid(form)
+        return response
 
-    # def form_valid(self, form):
-    #     response = super(CreateUserView, self).form_invalid(form)
-    #     print(form.cleaned_data)
-    #     if self.request.is_ajax():
-    #         print(form.cleaned_data)
-    #         data = {
-    #             'message': "Successfuly submitted form data."
-    #         }
-    #         return JsonResponse(data)
-    #     else:
-    #         return response
+    def form_valid(self, form):
+        response = super(CreateUserView, self).form_valid(form)
 
-    # def get(self, *args, **kwargs):
-    #     form = self.form_class()
-    #     return render(self.request, self.template_name, 
-    #         {"form": form})
+        user = form.save(commit=False)
+        password = form.cleaned_data["password"]
+        user.set_password(password)
+        user.save()
 
-    # def post(self, *args, **kwargs):
-    #     print(self.request.is_ajax)
-    #     if self.request.is_ajax and self.request.method == "POST":
-    #         form = self.form_class(self.request.POST)
-    #         if form.is_valid():
-    #             instance = form.save()
-    #             ser_instance = serializers.serialize('json', [ instance, ])
-    #             # send to client side.
-    #             return JsonResponse({"instance": ser_instance}, status=200)
-    #         else:
-    #             return JsonResponse({"error": form.errors}, status=400)
-
-    #     return JsonResponse({"error": ""}, status=400)
-
+        authenticate(
+            email=form.cleaned_data["email"],
+            password=form.cleaned_data["password"],
+        )
+        login(self.request, user)
+        ser_user = serializers.serialize(
+            "json",
+            [
+                user,
+            ],
+        )
+        return response
 
 
 # class CreateUserView(generic.CreateView):
@@ -82,7 +73,11 @@ def profile_page(request):
     # user = request.user
     user_books = Book.objects.filter(user=request.user)
     booklist_obj = Booklist.objects.new_or_get(request)
-    return render(request, 'accounts/user_profile.html', {'user_books': user_books, 'booklist_obj': booklist_obj})
+    return render(
+        request,
+        "accounts/user_profile.html",
+        {"user_books": user_books, "booklist_obj": booklist_obj},
+    )
 
 
 class UserDetailView(generic.DetailView):
@@ -95,41 +90,49 @@ class UserDetailView(generic.DetailView):
             book_list_obj = Booklist.objects.get(user=self.get_object())
         except:
             book_list_obj = Booklist.objects.new(user=self.get_object())
-        context['detail_user_booklist'] = book_list_obj
-        context['detail_user_books'] = Book.objects.filter(user=self.get_object())
+        context["detail_user_booklist"] = book_list_obj
+        context["detail_user_books"] = Book.objects.filter(user=self.get_object())
         return context
 
 
 @login_required
 def user_update(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Account updated!')
-            return redirect('accounts:user_profile')
+            messages.success(request, "Account updated!")
+            return redirect("accounts:user_profile")
         else:
-            messages.error(request, 'Please correct the error(s) below. ')
+            messages.error(request, "Please correct the error(s) below. ")
     else:
         form = UserUpdateForm(instance=request.user)
-    return render(request, 'accounts/user_setting.html', {
-        'form': form,
-    })
+    return render(
+        request,
+        "accounts/user_setting.html",
+        {
+            "form": form,
+        },
+    )
 
 
 @login_required
 def change_password(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, 'Password changed!')
-            return redirect('accounts:user_profile')
+            messages.success(request, "Password changed!")
+            return redirect("accounts:user_profile")
         else:
-            messages.error(request, 'Please correct the error(s) below. ')
+            messages.error(request, "Please correct the error(s) below. ")
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'accounts/password_change.html', {
-        'form': form,
-    })
+    return render(
+        request,
+        "accounts/password_change.html",
+        {
+            "form": form,
+        },
+    )

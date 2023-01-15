@@ -115,8 +115,8 @@
         <div class="col-md-4 mr-0" style="margin-top: -100px; z-index: 10;">
             <div class="card p-3" style="box-shadow: 0 80px 30px -60px #d6d6d6;">
 
-                <form id="account-create-form" class="my-ajax-form" action="{% url 'accounts:create_account' %}"
-                    method="POST" data-url="{% url 'accounts:create_account' %}">
+                <form id="account-create-form" action="{% url 'accounts:create_account' %}" method="POST">
+                    {% csrf_token %}
                     <input type="email" name="email" maxlength="255" class="form-control" required="" id="id_email"
                         placeholder="Email Address">
                     <span id="form-email-error"></span><br>
@@ -257,26 +257,26 @@
     }
 
     // animate button
-    var formData = document.getElementById('account-create-form');
-    var submitBtn = document.getElementById('form-submit-btn');
+    // var formData = document.getElementById('account-create-form');
+    // var submitBtn = document.getElementById('form-submit-btn');
 
-    formData.addEventListener('submit', () => {
-        submitBtn.innerHTML = "<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Loading...";
-        submitBtn.setAttribute("disabled", "");
+    // formData.addEventListener('submit', () => {
+    //     submitBtn.innerHTML = "<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Loading...";
+    //     submitBtn.setAttribute("disabled", "");
 
-        // disable inputes
-        // formData.childNodes[3].disabled = true;
-        // formData.childNodes[9].disabled = true;
+    //     // disable inputes
+    //     // formData.childNodes[3].disabled = true;
+    //     // formData.childNodes[9].disabled = true;
 
-        window.setTimeout(function () {
-            // when asyncronous action is done, remove the spinner
-            // re-enable button/fieldset
-            submitBtn.innerHTML = "Create Account"
-            submitBtn.removeAttribute("disabled", "");
-            formData.childNodes[3].disabled = false;
-            formData.childNodes[9].disabled = false;
-        }, 4000);
-    }, false);
+    //     window.setTimeout(function () {
+    //         // when asyncronous action is done, remove the spinner
+    //         // re-enable button/fieldset
+    //         submitBtn.innerHTML = "Create Account"
+    //         submitBtn.removeAttribute("disabled", "");
+    //         formData.childNodes[3].disabled = false;
+    //         formData.childNodes[9].disabled = false;
+    //     }, 4000);
+    // }, false);
 </script>
 
 {% endblock js %}
