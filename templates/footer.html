@@ -1,7 +1,9 @@
 {% load static %}
 
 <style>
-    footer span {color: slategray;}
+    footer span {
+        color: slategray;
+    }
 </style>
 
 <footer class="p-0 border-top bg-light">
@@ -17,23 +19,27 @@
                 </p> -->
             </div>
             <div class="col-md-7">
-                <h3>Company </h3> 
+                <h3>Company </h3>
                 <div class="d-flex justify-content-between align-items-center">
-                    <a href="/"> Home </a> <span>&CircleTimes;</span> <a href="{% url 'pages:about' %}"> About </a> <span>&CircleTimes;</span> 
-                    <a href="/"> Fidel </a> <span>&CircleTimes;</span> <a href="{% url 'pages:news_events' %}"> News & Events </a>
+                    <a href="/"> Home </a> <span>&CircleTimes;</span> <a href="{% url 'pages:about' %}"> About </a>
+                    <span>&CircleTimes;</span>
+                    <a href="/"> Fidel </a> <span>&CircleTimes;</span> <a href="{% url 'pages:news_events' %}"> News &
+                        Events </a>
                     <span>&CircleTimes;</span> <a href="{% url 'pages:contact' %}"> Contact </a>
                 </div>
-                <h3>Links </h3> 
+                <h3>Links </h3>
                 <div class="d-flex justify-content-between">
-                    <a href="{% url 'books:books' %}"> All Books </a> <span>&CircleTimes;</span> <a href="{% url 'books:recommendation' %}"> Recommendations </a> <span>&CircleTimes;</span> 
-                    <a href="/"> Fidel </a> <span>&CircleTimes;</span> <a href="{% url 'books:user_booklist' %}"> My Booklist </a>
+                    <a href="{% url 'books:books' %}"> All Books </a> <span>&CircleTimes;</span> <a
+                        href="{% url 'books:recommendation' %}"> Recommendations </a> <span>&CircleTimes;</span>
+                    <a href="{% url 'books:user_booklist' %}"> My
+                        Booklist </a> <span>&CircleTimes;</span> <a href="/"> Fidel </a>
                 </div>
             </div>
         </div>
     </div>
     <div class="bg-blue-black text-center text-white pb-2">
-        Copy right &copy; 2019-2020 Fidele INC. Made by 
-        <a href="https://ezop.herokuapp.com/" class="btn btn-sm btn-light" target="_blank"> Ezod </a> with 
-        <span style="font-size: 30px; color: #fff">&#9787;</span> 
+        Copy right &copy; 2019-2020 Fidele INC. Made by
+        <a href="http://adilmohak.github.io/adil" class="link" target="_blank"> Adil Mohak </a> with
+        <span style="font-size: 30px; color: #fff">&#9787;</span>
     </div>
 </footer>

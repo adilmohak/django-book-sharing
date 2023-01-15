@@ -7,48 +7,75 @@
 {% block content %}
 
 <style>
-    /* .main-img {filter: brightness(50%)} */
-    .main-img {
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: cover;
-        background-position: center center;
+    /* .hero {filter: brightness(50%)} */
+    .hero {
+        min-height: 50vh;
+        position: relative;
+    }
+
+    .hero::before {
+        content: '';
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .5);
+        z-index: 1;
+    }
+
+    .hero .bg-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
     }
 </style>
 
-<div class="main-search-wrapper main-img bg-dark" style="background-image: url({% static 'img/bg-1.jpg' %});">
-    
+<div class="hero bg-dark">
+    <img src="{% static 'img/bg-1.jpg' %}" class="bg-img" alt="">
+
     <style>
         .anim-text {
             width: 100%;
             position: absolute;
-            top: 30%;
+            top: 50%;
             left: 50%;
             transform: translateX(-50%) translateY(-50%);
+            z-index: 10;
         }
 
         .anim-text .text-wrapper {
-            font-size: 4em;
+            font-size: 55px;
             letter-spacing: -4px;
             font-weight: 700;
             color: #7e2ea0;
             text-align: center;
             text-shadow: -1px 1px 0 #fff, 1px 1px 0 #fff, 1px -1px 0 #fff, -1px -1px 0 #fff;
         }
+
         @media (max-width:700px) {
             .anim-text .text-wrapper {
                 font-size: 2.5em;
             }
         }
 
-        .cssanimation, .cssanimation span {
+        .cssanimation,
+        .cssanimation span {
             animation-duration: 1s;
             animation-fill-mode: both;
         }
 
-        .cssanimation span { display: inline-block }
+        .cssanimation span {
+            display: inline-block
+        }
 
-        .leRotateSkateInLeft span { animation-name: leRotateSkateInLeft }
+        .leRotateSkateInLeft span {
+            animation-name: leRotateSkateInLeft
+        }
+
         @keyframes leRotateSkateInLeft {
             from {
                 transform: scaleX(0.2) translateX(-100px);
@@ -59,8 +86,10 @@
 
     <div class="anim-text">
         <div class="container">
-            <h1 class="text-wrapper cssanimation sequence leRotateSkateInLeft">Books were my pass to personal freedom</h1>
-            <h1 class="cssanimation leRotateSkateInLeft random" style="margin-left: 100px; font-size: 20px;">- Oprah Winfrey</h1>
+            <h1 class="text-wrapper cssanimation sequence leRotateSkateInLeft">Books were my pass to personal freedom
+            </h1>
+            <h1 class="cssanimation leRotateSkateInLeft random" style="margin-left: 100px; font-size: 20px;">- Oprah
+                Winfrey</h1>
         </div>
     </div>
 
@@ -83,13 +112,16 @@
         </div>
         {% if request.user.is_authenticated %}
         {% else %}
-        <div class="col-md-4 mr-0" style="margin-top: -100px;">
+        <div class="col-md-4 mr-0" style="margin-top: -100px; z-index: 10;">
             <div class="card p-3" style="box-shadow: 0 80px 30px -60px #d6d6d6;">
-                
-                <form  id="account-create-form" class="my-ajax-form" action="{% url 'accounts:create_account' %}" method="POST" data-url="{% url 'accounts:create_account' %}">
-                    <input type="email" name="email" maxlength="255" class="form-control" required="" id="id_email" placeholder="Email Address">
+
+                <form id="account-create-form" class="my-ajax-form" action="{% url 'accounts:create_account' %}"
+                    method="POST" data-url="{% url 'accounts:create_account' %}">
+                    <input type="email" name="email" maxlength="255" class="form-control" required="" id="id_email"
+                        placeholder="Email Address">
                     <span id="form-email-error"></span><br>
-                    <input type="password" name="password" maxlength="128" class="form-control" required="" id="id_password" placeholder="New Password">
+                    <input type="password" name="password" maxlength="128" class="form-control" required=""
+                        id="id_password" placeholder="New Password">
                     <br>
                     <button id="form-submit-btn" class="btn btn-lg btn-success" type="submit">Create account</button>
                 </form>
@@ -103,15 +135,18 @@
     <div class="container">
         <div class="row">
             <style>
-                p {padding: 0; margin: 0;}
+                p {
+                    padding: 0;
+                    margin: 0;
+                }
             </style>
             <!-- <div class="col-md-3">
                 <img src="{% static 'img/favicon.png' %}" alt="" width="250px">
             </div> -->
             <div class="col-md-9"><br>
-                <h2>Recommended Books by the Fidel community</h2>
+                <h2>Books for you</h2>
                 <p class="text-warning"> Improve recommendations by adding books to your booklist and rating books.</p>
-                
+
                 {% include 'snippets/recommendation.html' %}
             </div>
         </div>
@@ -119,27 +154,37 @@
 
     <div class="row py-5 my-0 bg-blue-black text-light">
         <div class="col-md-4">
-            <div class="d-flex"><h1 class="counter">&#x2170;</h1> <h1 class="display-5">Read Books</h1></div>
+            <div class="d-flex">
+                <h1 class="counter">&#x2170;</h1>
+                <h1 class="display-5">Read Books</h1>
+            </div>
             <p style="position: relative;">
-                <h1 class="quet">&#8220;</h1>
-                Read your favorite books. We collect the most interesting books that everyone can read and 
-                gain some knowledge. Feel free to access anything and ask the authors. 
+            <h1 class="quet">&#8220;</h1>
+            Read your favorite books. We collect the most interesting books that everyone can read and
+            gain some knowledge. Feel free to access anything and ask the authors.
             </p>
         </div>
         <div class="col-md-4">
-            <div class="d-flex"><h1 class="counter">&#x2171;</h1> <h3 class="">Get Recommendations</h3></div>
+            <div class="d-flex">
+                <h1 class="counter">&#x2171;</h1>
+                <h3 class="">Get Recommendations</h3>
+            </div>
             <p style="position: relative;">
-                <h1 class="quet">&#8220;</h1>
-                We recommend books that may surprise you. Read the book you like and then we recommend books 
-                based on the genre of books you have read in the past. But this is done if you are logged in otherwise we recommend by highly rating book.
+            <h1 class="quet">&#8220;</h1>
+            We recommend books that may surprise you. Read the book you like and then we recommend books
+            based on the genre of books you have read in the past. But this is done if you are logged in otherwise we
+            recommend by highly rating book.
             </p>
         </div>
         <div class="col-md-4">
-            <div class="d-flex"><h1 class="counter">&#x2172;</h1> <h1 class="display-5">Group Discussion </h1></div>
+            <div class="d-flex">
+                <h1 class="counter">&#x2172;</h1>
+                <h1 class="display-5">Group Discussion </h1>
+            </div>
             <p style="position: relative;">
-                <h1 class="quet">&#8220;</h1>
-                Select a book you want then choose a discussion topic or create your own and then discuss it with other 
-                readers. The topic should be based on the book you have chosen. 
+            <h1 class="quet">&#8220;</h1>
+            Select a book you want then choose a discussion topic or create your own and then discuss it with other
+            readers. The topic should be based on the book you have chosen.
             </p>
         </div>
     </div>
@@ -151,7 +196,7 @@
 
 <script>
     // text animation
-    window.onload = function() {
+    window.onload = function () {
         animateSequence();
         animateRandom();
     };
@@ -214,7 +259,7 @@
     // animate button
     var formData = document.getElementById('account-create-form');
     var submitBtn = document.getElementById('form-submit-btn');
-    
+
     formData.addEventListener('submit', () => {
         submitBtn.innerHTML = "<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span> Loading...";
         submitBtn.setAttribute("disabled", "");

@@ -1,9 +1,9 @@
-from django.conf.urls import url
+from django.urls import path
 
 from .views import SearchView
 
 app_name = "searchs"
 
 urlpatterns = [
-    url(r'^$', SearchView.as_view(), name='query'),
+    path('', SearchView.as_view(), name='query'),
 ]

@@ -4,31 +4,36 @@
 
 {% block content %}
 <style>
-    .container {max-width: 960px;}
-    .lh-condensed { line-height: 1.25; }
+  .container {
+    max-width: 960px;
+  }
+
+  .lh-condensed {
+    line-height: 1.25;
+  }
 </style>
 
 <br><br><br>
 
 <div class="container">
-  
-{% if messages %}
-{% for message in messages %}
-    {% if message.tags == 'error' %}
-        <div class="alert alert-danger">
-            <i class="fas fa-exclamation-circle"></i> {{ message }}
-        </div>
-    {% else %}
-        <div class="alert alert-success">
-            <i class="fas fa-check-circle"></i> {{ message }}
-        </div>
-    {% endif %}
-{% endfor %}
-{% endif %}
 
-<h1 class="display-4">Contact US</h1>
-<p class="lead text-muted">Make contact with us. Get news, updates, and any activities from ACO quickly. 
-  Once you submit the form, we will contact you by email as soon as possible.</p>
+  {% if messages %}
+  {% for message in messages %}
+  {% if message.tags == 'error' %}
+  <div class="alert alert-danger">
+    <i class="fas fa-exclamation-circle"></i> {{ message }}
+  </div>
+  {% else %}
+  <div class="alert alert-success">
+    <i class="fas fa-check-circle"></i> {{ message }}
+  </div>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+
+  <h1 class="display-4">Contact US</h1>
+  <p class="lead text-muted">Make contact with us. Get news, updates, and any activities from us quickly.
+    Once you submit the form, we will contact you by email as soon as possible.</p>
 </div>
 
 <div class="container">
@@ -96,20 +101,22 @@
             </div>
             <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
             <div class="invalid-feedback">
-                Please enter a valid email address for shipping updates.
+              Please enter a valid email address for shipping updates.
             </div>
           </div>
         </div>
 
         <div class="mb-3">
           <label for="address">Message</label>
-          <textarea class="form-control" name="message" id="textarea" cols="30" rows="10" placeholder="your message..."></textarea>
+          <textarea class="form-control" name="message" id="textarea" cols="30" rows="10"
+            placeholder="your message..."></textarea>
           <div class="invalid-feedback">
             Please enter your message.
           </div>
         </div>
-        
-        <button class="btn btn-primary btn-lg btn-block mb-5" type="submit" style="border-radius: 1px;">Send message</button>
+
+        <button class="btn btn-primary btn-lg btn-block mb-5" type="submit" style="border-radius: 1px;">Send
+          message</button>
       </form>
     </div>
   </div>
@@ -117,26 +124,26 @@
 {% endblock content %}
 
 {% block js %}
-  <script>
-      // Example starter JavaScript for disabling form submissions if there are invalid fields
-      (function () {
-      'use strict'
+<script>
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function () {
+    'use strict'
 
-      window.addEventListener('load', function () {
-          // Fetch all the forms we want to apply custom Bootstrap validation styles to
-          var forms = document.getElementsByClassName('needs-validation')
+    window.addEventListener('load', function () {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation')
 
-          // Loop over them and prevent submission
-          Array.prototype.filter.call(forms, function (form) {
-          form.addEventListener('submit', function (event) {
-              if (form.checkValidity() === false) {
-              event.preventDefault()
-              event.stopPropagation()
-              }
-              form.classList.add('was-validated')
-          }, false)
-          })
-      }, false)
-      }())
-  </script>
+      // Loop over them and prevent submission
+      Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener('submit', function (event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+    }, false)
+  }())
+</script>
 {% endblock js %}

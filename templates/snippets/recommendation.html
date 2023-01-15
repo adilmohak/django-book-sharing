@@ -1,6 +1,6 @@
 {% load ratings %}
 <style>
-    @media (max-width: 700px){
+    @media (max-width: 700px) {
         .row {
             display: block;
         }
@@ -9,26 +9,32 @@
 
 <div class="row">
     {% for obj in sorted_recomended_books %}
-        <div class="col-md-6 p-3">
-            <div class="book-card">
-                <a href="{{ obj.get_absolute_url }}">
-                    <img src="{{ obj.cover_page.url }}" alt="" class="cover-page"/>
-                </a>
-                <div class="summary py-3">
-                    <h6><a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a></h6>
-                    <p class="pb-2 m-0">By: 
-                        <a href="{{ obj.user.get_absolute_url }}" class="text-muted">{{ obj.user.get_full_name }}</a> | Author 
-                        <span class="text-muted">{{ obj.author }}</span></p>
-                    <div class="d-flex text-muted">
-                        <small>{% ratings obj %}</small>
-                    </div>
-                    {% include 'snippets/booklist_form.html' with obj=obj %}
-                    <p>{% if obj.summary %}<small>{{ obj.summary|truncatechars:80 }}</small>{% else %}<span class="text-warning">No summary set for this book.</span>{% endif %}</p>
+    <div class="col-md-6 p-3">
+        <div class="book-card">
+            <a href="{{ obj.get_absolute_url }}">
+                <img src="{{ obj.cover_page.url }}" alt="" class="cover-page" />
+            </a>
+            <div class="summary py-3">
+                <h6><a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a></h6>
+                <p class="pb-2 m-0">By:
+                    <a href="{{ obj.user.get_absolute_url }}" class="text-muted">{{ obj.user.get_full_name }}</a> |
+                    Author
+                    <span class="text-muted">{{ obj.author }}</span>
+                </p>
+                <div class="d-flex text-muted">
+                    <small>{% ratings obj %}</small>
                 </div>
+                {% include 'snippets/booklist_form.html' with obj=obj %}
+                <p>{% if obj.summary %}<small>{{ obj.summary|truncatechars:80 }}</small>{% else %}<span
+                        class="alert alert-warning p-2">No summary set for this book.</span>{% endif %}</p>
             </div>
         </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info w-100 text-center">Oops... This is soooo empty :(</div>
     {% endfor %}
 </div>
+<br><br><br>
 
 
 <!-- <div class="d-block py-3" id="r-books">Loding recommendations...</div> -->
