@@ -28,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -66,6 +65,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 ROOT_URLCONF = "djBooks.urls"
 
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -93,8 +93,12 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "djBooks.wsgi.application"
+# custom user model
+AUTH_USER_MODEL = "accounts.User"
 
+ROOT_URLCONF = "djBooks.urls"
+
+WSGI_APPLICATION = "djBooks.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
