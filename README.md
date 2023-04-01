@@ -31,6 +31,5 @@ Finally go to this address http://127.0.0.1:8000
 
 ## Feel free to contribute 👨‍💻👨‍💻
 
-## Support me with your mighty star ✨🤩
-
+# Useful? Give that star ⭐️ a click! 😊
 # Thanks
